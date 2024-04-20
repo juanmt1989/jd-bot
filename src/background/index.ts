@@ -7,11 +7,7 @@ type Message = {
   action: string
 }
 
-// async function getCurrentTab() {
-//   const list = await tabs.query({ active: true, currentWindow: true })
-//
-//   return list[0]
-// }
+
 
 async function incrementStoredValue(tabId: string) {
   const data = await storage.local.get(tabId)
@@ -26,7 +22,6 @@ export async function init() {
   runtime.onMessage.addListener(async (message: Message) => {
     if (message.to === 'background') {
       console.log('background handled: ', message.action)
-
       const tab = await getCurrentTab()
       const tabId = tab.id
 

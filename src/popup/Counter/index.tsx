@@ -8,6 +8,7 @@ export const Counter = () => {
   useEffect(() => {
     const readBackgroundMessage = async () => {
       const tab = await getCurrentTab()
+      debugger
       const tabId = tab.id
 
       if (tabId) {

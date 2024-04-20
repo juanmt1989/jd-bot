@@ -1,5 +1,5 @@
 {
-  "name": "jdbot-extesion",
+  "name": "jdbot-extension",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -42,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.266",
     "@types/webextension-polyfill": "^0.10.0",
     "customize-cra": "^1.0.0",
     "prettier": "2.8.7",
