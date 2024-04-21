@@ -36,4 +36,5 @@ runtime.onInstalled.addListener(() => {
   init().then(() => {
     console.log('[background] loaded ')
   })
+  
 })
