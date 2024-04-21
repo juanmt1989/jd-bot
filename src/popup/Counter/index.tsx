@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React,{ useEffect, useState } from 'react'
 import { storage } from 'webextension-polyfill'
 import { getCurrentTab } from '../../helpers/tabs'
 

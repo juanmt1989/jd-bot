@@ -1,4 +1,5 @@
 import { runtime } from 'webextension-polyfill'
+import {initBtnExexute} from './observer/btnexecute'
 
 
 console.log('[content] loaded ')
@@ -26,6 +27,11 @@ async function countClicks() {
 
 export function init() {
   registerClickListener(countClicks)
+  initBtnExexute()
+
 }
 
 init()
+
+
+
