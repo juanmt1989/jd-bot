@@ -24,13 +24,14 @@ export const Counter = () => {
 
   return (
     <div
-      style={{
-        height: '100vh',
-        fontSize: '24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+    //this style represent the position of the click 
+      // style={{
+      //   height: '100vh',
+      //   fontSize: '24px',
+      //   display: 'flex',
+      //   alignItems: 'center',
+      //   justifyContent: 'center',
+      // }}
     >
       Clicks: {value}
     </div>
