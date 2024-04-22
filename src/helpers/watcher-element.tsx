@@ -10,7 +10,7 @@ const useMutationObserver: MutationObserverHook = (targetId, callback, options) 
     const targetNode = document.querySelector(targetId)
 
     if (!targetNode) {
-      console.error(`Element with id '${targetId}' not found.`);
+      console.warn(`Element with id '${targetId}' not found.`);
       return;
     }
 
