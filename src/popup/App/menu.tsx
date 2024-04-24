@@ -11,6 +11,8 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Snackbar from '@mui/material/Snackbar';
 import AlignItemsList from './userlist'
+import SideDrawerMenu from './sidedrawer'
+import AddUser from './AddUser'
 
 export default function FabIntegrationSnackbar() {
   return (
@@ -30,14 +32,14 @@ export default function FabIntegrationSnackbar() {
               color="inherit"
               aria-label="menu"
             >
-              <MenuIcon />
+              <SideDrawerMenu/>
             </IconButton>
             <Typography variant="h6" color="inherit" component="div">
-              App bar
+              JD Bot
             </Typography>
           </Toolbar>
         </AppBar>
-        <AlignItemsList/> 
+        <AlignItemsList /> 
         <Fab
           color="secondary"
           sx={{
@@ -46,8 +48,8 @@ export default function FabIntegrationSnackbar() {
             right: (theme) => theme.spacing(2),
           }}
         >
-             {/* <AlignItemsList/>  */}
-            <AddIcon />
+           
+            <AddUser />
         </Fab>
         
       </div>

@@ -8,7 +8,6 @@ type Listener = (event: MouseEvent) => void
 
 let count = 0
 
-
 function registerClickListener(listener: Listener) {
   window.addEventListener('click', listener)
 

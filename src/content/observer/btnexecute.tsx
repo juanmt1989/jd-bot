@@ -4,8 +4,6 @@ import useMutationObserver  from '../../helpers/watcher-element';
 
 const BtnExexute: React.FC = () => {
   
-  console.log(`attempt listen execute.`);
-
   const targetID = "button[data-bs-target='#exampleModal']"
 
   const config: MutationObserverInit = {
@@ -14,17 +12,17 @@ const BtnExexute: React.FC = () => {
   };
 
   useMutationObserver(targetID, (mutations) => {
-    console.log('Mutation detected:', mutations);
     mutations.forEach((mutation) => {
         if (mutation.target instanceof HTMLInputElement || mutation.target instanceof HTMLButtonElement) {
           if (mutation.target.disabled) {
             mutation.target.disabled =false
+            console.log('Removing stupid disabled validation');
           }
         }
     })
   },config);
 
-  return <div>hello me!</div>;
+  return <div>hello me, its me again!</div>;
 };
 
 

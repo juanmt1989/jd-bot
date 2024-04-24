@@ -33,6 +33,9 @@ export async function init() {
 }
 
 runtime.onInstalled.addListener(() => {
+ // self.skipWaiting();
+
+  
   init().then(() => {
     console.log('[background] loaded ')
   })
