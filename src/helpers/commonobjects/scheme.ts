@@ -1,67 +1,74 @@
-import React from "react";
+declare namespace jdbotScheme {
+    type userformation = {
+        idcustomer: string,
+        solesid: string,
+        fullname: string,
+        email: string,
+        createdate: Date
+    };
 
 
-type Customer = {
-    idcustomer: string,
-    solesid: string,
-    fullname: string,
-    email: string
-};
+    type operation = {
+        idcustomer: string,
+        block: block,
+        balance: number,
+        processing: number,
+        nextcoin: coin,
+        //"now": "2024/04/19 20:56:58"
+        servertime: Date,
+        //"date": "2024/04/19 21:39:23"
+        duedate: Date,
+        //"dateinit": "2024/04/19 19:15:23"
+        lastoperation:Date
+    }
 
+    type coin = {
+        id : number,
+        name: string,
+        abbr: string,
+        lastattempt: Date,
+        nextattempt: Date, 
+    }
 
-type operation = {
-    idcustomer: string,
-    block: block,
-    balance: number,
-    processing: number,
-    nextcoin: coin,
-    //"now": "2024/04/19 20:56:58"
-    servertime: Date,
-    //"date": "2024/04/19 21:39:23"
-    duedate: Date,
-    //"dateinit": "2024/04/19 19:15:23"
-    lastoperation:Date
-}
+    type block = {
+        idblock:number,
+        blockname: string,
+        indexcoin : number,
+        current: coin
+    }
 
-type coin = {
-    id : number,
-    name: string,
-    abbr: string,
-    lastattempt: Date,
-    nextattempt: Date, 
-}
+    type ordercoin =  [coin,[coin,coin,coin,coin,coin],coin]
 
-type block = {
-    idblock:number,
-    blockname: string,
-    indexcoin : number,
-    current: coin
-}
+    type profits = {
 
-type ordercoin =  [coin,[coin,coin,coin,coin,coin],coin]
+        //"ID": 5184985,
+        idprofit: number,
+        // "Key": "YVHNWW8P48WI129197",
+        soleshash: string,
+        // "Date": "19/04/2024", // "Hour": "19:15",
+        executiontime: Date,
+        // "Exchanges": "Kucoin | Binance",
+        exchanges: string,
+        // "Prices": "1,12883307 | 1,13851041",
+        prices: string,
+        // "Amount": "300.00000000",
+        amount: number,
+        // "Percent": "0,86",
+        total_roi: number,
+    // "percentwin": "0,52",
+        exchange: string
 
-type profits = {
+        real_earn: number
+        crypto : coin,
+        block: block
 
-    //"ID": 5184985,
-    idprofit: number,
-    // "Key": "YVHNWW8P48WI129197",
-    soleshash: string,
-    // "Date": "19/04/2024", // "Hour": "19:15",
-    executiontime: Date,
-    // "Exchanges": "Kucoin | Binance",
-    exchanges: string,
-    // "Prices": "1,12883307 | 1,13851041",
-    prices: string,
-    // "Amount": "300.00000000",
-    amount: number,
-    // "Percent": "0,86",
-    total_roi: number,
-   // "percentwin": "0,52",
-    exchange: string
+    }
+}  
+export type userformation = jdbotScheme.userformation
+export type operation = jdbotScheme.operation
+export type coin = jdbotScheme.coin
+export type ordercoin = jdbotScheme.ordercoin
+export type block = jdbotScheme.block
+export type profits = jdbotScheme.profits
 
-    real_earn: number
-    crypto : coin,
-    block: block
-
-}
-    
+export default jdbotScheme
