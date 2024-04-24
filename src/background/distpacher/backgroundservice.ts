@@ -1,34 +1,42 @@
 import { runtime } from 'webextension-polyfill'
 import { getCurrentTab } from '../../helpers/tabs'
-import  jdbotScheme,  {userformation} from './../../helpers/commonobjects/scheme'
-import  jdbActions from './../../helpers/commonobjects/enumactions'
-
-type Message = {
-    from: string
-    to: string
-    action: any
-  }
+import  jdbScheme,  {userformation} from './../../helpers/commonobjects/scheme'
+import {CustomerAction}  from '../../helpers/commonobjects/customeraction'
+import * as crypt from '../../helpers/encrypt'
   
-async function Sender() {
+  export async function Sender() {
 
     // step 2
     return runtime.sendMessage({ from: 'content', to: 'background', action: 'click' })
   }
 
 
-  async function Receiver() {
+  export async function Receiver() {
 
-    runtime.onMessage.addListener(async (message: Message) => {
+    runtime.onMessage.addListener(async (message: any) => {
+      
         if (message.from === 'popup' && message.to === 'background') {
-            // if (message.action instanceof jdbActions.CustomerAction){
-            //     PopupMsg(message.action)
-            // }
+            console.log('Receiver: from popup to backgroundadd ',message.action)
+            if (message.action.toString() == CustomerAction.GetCustomer)
+              {
+                PopupMsg(message.action)
+              }
+        }
+
+        if (message.from === 'content' && message.to === 'background') {
+          console.log('Receiver: from content to backgroundadd ',message.action)
+          if (message.action.toString() == CustomerAction.SaveCustomer)
+          {
+              let decryptdata = crypt.decryptData(message.data)
+              
+          }
 
         }
       })
   }
 
-  async function PopupMsg(action:jdbActions.CustomerAction) {
+  async function PopupMsg(action:CustomerAction) {
+    console.log('PopupMsg: from backgroundadd to content ',action)
     return runtime.sendMessage({ from: 'background', to: 'content', action: action })
 }
   

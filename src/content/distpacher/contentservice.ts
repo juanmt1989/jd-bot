@@ -1,34 +1,29 @@
 import { runtime } from 'webextension-polyfill'
 import { getCurrentTab } from '../../helpers/tabs'
-import  jdbotScheme,  {userformation} from './../../helpers/commonobjects/scheme'
-import  jdbActions from './../../helpers/commonobjects/enumactions'
+import * as crypt from '../../helpers/encrypt'
+import {CustomerAction}  from '../../helpers/commonobjects/customeraction'
+import {GetUserInformation} from '../apicalls/solescall'
 
-type Message = {
-    from: string
-    to: string
-    action: any
-  }
-  
 
-async function Sender() {
+export async function Sender(action:any,data:any) {
 
-    // step 2
-    return runtime.sendMessage({ from: 'content', to: 'background', action: 'click' })
+    return runtime.sendMessage({ from: 'content', to: 'background', action: action, data: data })
 }
 
 
-async function Receiver() {
+export async function Receiver() {
 
-  runtime.onMessage.addListener(async (message: Message) => {
+  runtime.onMessage.addListener(async (message: any) => {
       if (message.from === 'background' && message.to === 'content') {
-          // if (message.action instanceof (jdbActions.CustomerAction) ){
-          //     PopupMsg(message.action)
-          // }
+        console.log('Receiver: from background to content ',message.action)
+        if (message.action.toString() == CustomerAction.GetCustomer){
+            let data =  await GetUserInformation()
+            let encrypt = crypt.encryptData(data)
+            console.log('encrypt: ',encrypt)
+            Sender(CustomerAction.SaveCustomer,encrypt)
+        }
 
       }
     })
 }
 
-async function PopupMsg(action:jdbActions.CustomerAction) {
-  return runtime.sendMessage({ from: 'background', to: 'content', action: action })
-}
