@@ -1,5 +1,3 @@
-import ReactDOM from 'react-dom/client';
-import React from 'react';
 
 export const GetUserInformation = async () => {
   try {
