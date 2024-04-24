@@ -1,6 +1,6 @@
 import { runtime } from 'webextension-polyfill'
 import {initBtnExexute} from './observer/btnexecute'
-
+import * as distpacher from './distpacher/contentservice'
 
 console.log('[content] loaded ')
 
@@ -25,9 +25,11 @@ async function countClicks() {
 }
 
 export function init() {
-  registerClickListener(countClicks)
+ // registerClickListener(countClicks)
   initBtnExexute()
-
+  distpacher.Receiver().then(() => {
+    console.log('[content] distpacher Receiver')
+  });//start listen popup and content
 }
 
 init()
