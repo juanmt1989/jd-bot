@@ -2,6 +2,7 @@ import { runtime } from 'webextension-polyfill'
 import { getCurrentTab } from '../../helpers/tabs'
 import  jdbScheme,  {userformation} from './../../helpers/commonobjects/scheme'
 import {CustomerAction}  from '../../helpers/commonobjects/customeraction'
+import {SaveUserInfo} from '../apicalls/storedata'
 import * as crypt from '../../helpers/encrypt'
   
   export async function Sender() {
@@ -28,6 +29,7 @@ import * as crypt from '../../helpers/encrypt'
           if (message.action.toString() == CustomerAction.SaveCustomer)
           {
               let decryptdata = crypt.decryptData(message.data)
+              SaveUserInfo(decryptdata)
               
           }
 
