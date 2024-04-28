@@ -28,6 +28,7 @@ import * as crypt from '../../helpers/encrypt'
           if (message.action.toString() == CustomerAction.SaveCustomer)
           {
               let decryptdata = crypt.decryptData(message.data)
+              console.log(decryptdata)
               
           }
 
