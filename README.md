@@ -1,2 +1,2 @@
-# jd-bot
+# jdbot-extension
 chrome extension to manage accounts
