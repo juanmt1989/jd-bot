@@ -1,6 +1,5 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -10,21 +9,23 @@ import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Snackbar from '@mui/material/Snackbar';
-import AlignItemsList from './userlist'
-import SideDrawerMenu from './sidedrawer'
-import AddUser from './AddUser'
+import UserItemList from './views/userslist'
+import SideDrawerMenu, {toggleDrawer} from './sidedrawer'
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import { Outlet } from "react-router-dom";
 
-export default function FabIntegrationSnackbar() {
+export default function MainMenu() {
+  const ref = React.useRef<HTMLDivElement>(null);
   return (
     <React.Fragment>
-      <CssBaseline />
       <GlobalStyles
         styles={(theme) => ({
           body: { backgroundColor: theme.palette.background.paper },
         })}
       />
       <div>
-        <AppBar position="static" color="primary">
+        <AppBar position="fixed" color="primary">
           <Toolbar>
             <IconButton
               edge="start"
@@ -32,26 +33,15 @@ export default function FabIntegrationSnackbar() {
               color="inherit"
               aria-label="menu"
             >
-              <SideDrawerMenu/>
+             <MenuIcon   onClick ={toggleDrawer('left',true)}/>
             </IconButton>
             <Typography variant="h6" color="inherit" component="div">
               JD Bot
             </Typography>
           </Toolbar>
         </AppBar>
-        <AlignItemsList /> 
-        <Fab
-          color="secondary"
-          sx={{
-            position: 'absolute',
-            bottom: (theme) => theme.spacing(2),
-            right: (theme) => theme.spacing(2),
-          }}
-        >
-           
-            <AddUser />
-        </Fab>
-        
+        <SideDrawerMenu />
+        <Outlet />
       </div>
     </React.Fragment>
   );
