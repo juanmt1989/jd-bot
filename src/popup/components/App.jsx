@@ -1,5 +1,6 @@
 import React from 'react'
-import { Outlet } from "react-router-dom";
+import { createRoutesFromElements, Route } from "react-router-dom";
+import { HashRouter, Routes, Link } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import MainMenu from './menu'
 import FooterMainMenu from './footermenu'
@@ -14,12 +15,10 @@ import { Box } from '@mui/material';
 function App() {
   return (
     <div className="App">
-      <MainMenu />
-      <RouterProvider router={router} />
-      <Container sx={{ bgcolor: '#cfe8fc', height: '10vh' }} > 
-       test
-      </Container>
+      <MainMenu/>
+      {/* <TxnHistory/> */}
       <FooterMainMenu/>
+      
     </div>
   )
 }
@@ -28,15 +27,11 @@ export default App
 
 
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <MainMenu />,
-    children: [
-      {
-        element: <TxnHistory />,
-      },
-    ],
-  },
-]);
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<MainMenu/>} >
+      {/* <Route  element={<TxnHistory/>} /> */}
+    </Route>
+  )
+);
 

@@ -41,7 +41,8 @@ export default function MainMenu() {
           </Toolbar>
         </AppBar>
         <SideDrawerMenu />
-        <Outlet />
+        <main><Outlet /></main>
+        
       </div>
     </React.Fragment>
   );
