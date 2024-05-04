@@ -14,6 +14,8 @@ import SideDrawerMenu, {toggleDrawer} from './sidedrawer'
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { Outlet } from "react-router-dom";
+import { HashRouter, Route, Routes, Link, useLocation,useNavigate} from 'react-router-dom';
+import {HomePage,ContactPage,AboutPage} from './template-comp'
 
 export default function MainMenu() {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -25,13 +27,14 @@ export default function MainMenu() {
         })}
       />
       <div>
-        <AppBar position="fixed" color="primary">
+        <AppBar position="fixed" className='' color="primary">
           <Toolbar>
             <IconButton
               edge="start"
               sx={{ mr: 2 }}
               color="inherit"
               aria-label="menu"
+              
             >
              <MenuIcon   onClick ={toggleDrawer('left',true)}/>
             </IconButton>
@@ -39,9 +42,13 @@ export default function MainMenu() {
               JD Bot
             </Typography>
           </Toolbar>
+         
         </AppBar>
+        <div className='header-size'></div>
         <SideDrawerMenu />
-        <main><Outlet /></main>
+        <main>
+       
+        </main>
         
       </div>
     </React.Fragment>
