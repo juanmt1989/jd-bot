@@ -10,59 +10,86 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import { runtime } from 'webextension-polyfill'
+import {Link} from 'react-router-dom';
+import useDrawerState from './helper/eventhandler'
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
+export default function SideDrawerMenu() {
+  const [state, setState] = React.useState(false);
+
+  runtime.onMessage.addListener(async (message: any) => {
+    console.log("Receiving mesage ")
+    if (message.to === 'SideDrawerMenu') {
+      setState(message.state)
+      return Promise.resolve("done");
+    }
+    return false;
+  })
 
 
-
-export const toggleDrawer =
-  (anchor: Anchor, open: boolean) =>
-  (event: React.KeyboardEvent | React.MouseEvent) => {
-
-  const [state, setState] = React.useState({
-      top: false,
-      left: false,
-      bottom: false,
-      right: false,
-  });
-    
+  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
       event.type === 'keydown' &&
       ((event as React.KeyboardEvent).key === 'Tab' ||
         (event as React.KeyboardEvent).key === 'Shift')
     ) {
-      return;
+      return false;
     }
-
-    setState({ ...state, [anchor]: open });
-};
-
-export default function SideDrawerMenu() {
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
   
-  const list = (anchor: Anchor) => (
+    setState(open);
+    return true;
+  };
+
+  const list = () => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      sx={{ width: 250 }}
       role="presentation"
-      onClick={toggleDrawer('left', false)}
-      onKeyDown={toggleDrawer('left', false)}
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
     >
       <List>
-        <ListItem key="User Accounts" disablePadding>
+          <ListItem key="accounts" disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <AccountBoxIcon/>
+                <PeopleAltIcon/>  
               </ListItemIcon>
-              <ListItemText primary="User Accounts" />
+              <Link to="/users"  className='plain-link'>
+                <ListItemText primary="Accounts"/>
+              </Link>
             </ListItemButton>
-        </ListItem>
+          </ListItem>
+      </List>
+      <List>
+          <ListItem key="txnhistiory" disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <TimelineIcon/>  
+              </ListItemIcon>
+              <Link to="/txnhistiory"  className='plain-link'>
+                <ListItemText primary="Transaction History"/>
+              </Link>
+            </ListItemButton>
+          </ListItem>
+      </List>
+      <List>
+          <ListItem key="finance" disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <LeaderboardIcon/>  
+              </ListItemIcon>
+              <Link to="/finance"  className='plain-link'>
+                <ListItemText primary="Finance"/>
+              </Link>
+            </ListItemButton>
+          </ListItem>
+      </List>
+      <Divider />
+
+      <List>
         {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
@@ -76,29 +103,25 @@ export default function SideDrawerMenu() {
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
+          <ListItem key="useraccount" disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <AccountCircleIcon/>  
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <Link to="/useraccount"  className='plain-link'>
+                <ListItemText primary="User Account"/>
+              </Link>
             </ListItemButton>
           </ListItem>
-        ))}
       </List>
     </Box>
   );
 
   return (
     <div>
-      <React.Fragment key={'left'}>
-          <Drawer
-            anchor={'left'}
-            open={state['left']}
-            onClose={toggleDrawer('left', false)}
-          >
-            {list('left')}
+      <React.Fragment key='left'>
+          <Drawer anchor='left'open={state} onClose={toggleDrawer(false)} >
+            {list()}
           </Drawer>
         </React.Fragment>
     </div>

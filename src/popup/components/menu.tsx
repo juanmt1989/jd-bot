@@ -10,7 +10,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Snackbar from '@mui/material/Snackbar';
 import UserItemList from './views/userslist'
-import SideDrawerMenu, {toggleDrawer} from './sidedrawer'
+import useDrawerState from './helper/eventhandler'
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { Outlet } from "react-router-dom";
@@ -19,6 +19,7 @@ import {HomePage,ContactPage,AboutPage} from './template-comp'
 
 export default function MainMenu() {
   const ref = React.useRef<HTMLDivElement>(null);
+  const {toggleDrawer} = useDrawerState();
   return (
     <React.Fragment>
       <GlobalStyles
@@ -33,23 +34,17 @@ export default function MainMenu() {
               edge="start"
               sx={{ mr: 2 }}
               color="inherit"
-              aria-label="menu"
-              
-            >
-             <MenuIcon   onClick ={toggleDrawer('left',true)}/>
+              aria-label="menu">
+                
+            <MenuIcon  onClick={toggleDrawer(true)} />
+
             </IconButton>
             <Typography variant="h6" color="inherit" component="div">
               JD Bot
             </Typography>
           </Toolbar>
-         
         </AppBar>
         <div className='header-size'></div>
-        <SideDrawerMenu />
-        <main>
-       
-        </main>
-        
       </div>
     </React.Fragment>
   );

@@ -11,3 +11,8 @@ body {
     margin-top: 20%;
 
   }
+
+  .plain-link, .plain-link:visited, .plain-link:link, .plain-link:hover, .plain-link:active{
+    color: inherit;
+    text-decoration: none;
+  }
