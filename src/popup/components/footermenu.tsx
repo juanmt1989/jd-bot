@@ -5,8 +5,8 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import HomeIcon from '@mui/icons-material/Home';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import Paper from '@mui/material/Paper';
-import { HashRouter, Route, Routes, Link,Navigate} from 'react-router-dom';
-import {HomePage,ContactPage,AboutPage} from './template-comp'
+import { Link} from 'react-router-dom';
+
 
 export default function FooterMainMenu() {
     const [value, setValue] = React.useState('home');

@@ -5,21 +5,20 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import Snackbar from '@mui/material/Snackbar';
-import UserItemList from './views/userslist'
 import useDrawerState from './helper/eventhandler'
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import { Outlet } from "react-router-dom";
-import { HashRouter, Route, Routes, Link, useLocation,useNavigate} from 'react-router-dom';
-import {HomePage,ContactPage,AboutPage} from './template-comp'
+import { BrowserRouter, Route, Routes, Link,useLocation} from 'react-router-dom';
+import TxnHistory from './views/transactionshistory'
+import ViewUsersList from './views/userslist'
+import SideDrawerMenu from './sidedrawer'
+import FinanceChart from './views/finance'
+import UserAccount from './views/useraccount'
+import FooterMainMenu from './footermenu'
 
 export default function MainMenu() {
   const ref = React.useRef<HTMLDivElement>(null);
-  const {toggleDrawer} = useDrawerState();
+  const {toggleDrawer,state} = useDrawerState();
+
+
   return (
     <React.Fragment>
       <GlobalStyles
@@ -35,7 +34,7 @@ export default function MainMenu() {
               sx={{ mr: 2 }}
               color="inherit"
               aria-label="menu">
-                
+
             <MenuIcon  onClick={toggleDrawer(true)} />
 
             </IconButton>
@@ -46,6 +45,16 @@ export default function MainMenu() {
         </AppBar>
         <div className='header-size'></div>
       </div>
+      <BrowserRouter>
+          <SideDrawerMenu state={state} toggleDrawer={toggleDrawer}/>
+          <Routes >
+            <Route path='/txnhistiory' element={<TxnHistory/>} />
+            <Route path='/finance' element={<FinanceChart/>} />
+            <Route path='/users' element={<ViewUsersList/>} />
+            <Route path='/useraccount' element={<UserAccount/>} />
+          </Routes>
+          <FooterMainMenu/>
+      </BrowserRouter>
     </React.Fragment>
   );
 }

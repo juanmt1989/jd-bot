@@ -6,12 +6,15 @@ import SideDrawerMenu from './sidedrawer'
 import FinanceChart from './views/finance'
 import UserAccount from './views/useraccount'
 import FooterMainMenu from './footermenu'
+import useDrawerState from './helper/eventhandler'
+
 
 export default function BodyContent() {
+    const {toggleDrawer,state} = useDrawerState();
+
     return (
-     
     <BrowserRouter>
-        <SideDrawerMenu/>
+        <SideDrawerMenu open={state}/>
         <Routes >
           <Route path='/txnhistiory' element={<TxnHistory/>} />
           <Route path='/finance' element={<FinanceChart/>} />

@@ -18,31 +18,7 @@ import { runtime } from 'webextension-polyfill'
 import {Link} from 'react-router-dom';
 import useDrawerState from './helper/eventhandler'
 
-export default function SideDrawerMenu() {
-  const [state, setState] = React.useState(false);
-
-  runtime.onMessage.addListener(async (message: any) => {
-    console.log("Receiving mesage ")
-    if (message.to === 'SideDrawerMenu') {
-      setState(message.state)
-      return Promise.resolve("done");
-    }
-    return false;
-  })
-
-
-  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return false;
-    }
-  
-    setState(open);
-    return true;
-  };
+export default function SideDrawerMenu({state,toggleDrawer}) {
 
   const list = () => (
     <Box
