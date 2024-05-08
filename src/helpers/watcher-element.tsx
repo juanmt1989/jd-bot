@@ -7,20 +7,26 @@ interface MutationObserverHook {
 
 const useMutationObserver: MutationObserverHook = (targetId, callback, options) => {
   React.useEffect(() => {
-    const targetNode = document.querySelector(targetId)
+    const location = document.location.href
+    const targetNode = document.querySelector(targetId);
 
     if (!targetNode) {
-      console.warn(`Element with id '${targetId}' not found.`);
-      return;
+      if (location.includes("arbitrage/manual")){
+        console.warn(`Element with id '${targetId}' not found.`);
+        return;
+      }
+      
     }
+    else{
 
-    const observer = new MutationObserver(callback);
-    observer.observe(targetNode, options);
+      const observer = new MutationObserver(callback);
+      observer.observe(targetNode, options);
 
-    //Wil disconet juts after call?
-    return () => {
-      observer.disconnect();
-    };
+      //Wil disconet juts after call?
+      return () => {
+        observer.disconnect();
+      };
+    }
   }, [targetId, callback, options]);
 };
 

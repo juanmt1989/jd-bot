@@ -1,7 +1,7 @@
 import { runtime } from 'webextension-polyfill'
 import { getCurrentTab } from '../../helpers/tabs'
 import * as crypt from '../../helpers/encrypt'
-import {CustomerAction}  from '../../helpers/commonobjects/customeraction'
+import {CustomerAction}  from '../../models/customeraction'
 import {GetUserInformation} from '../apicalls/solescall'
 
 
