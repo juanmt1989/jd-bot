@@ -25,9 +25,9 @@ export default function FooterMainMenu() {
         <BottomNavigation value={value}  onChange={handleChange}>
             <BottomNavigationAction
               component={Link}
-              to="/users" 
+              to="/bots" 
               label="Accounts"
-              value="accounts"
+              value="bots"
               icon={<AccountBoxIcon />}/>
             <BottomNavigationAction 
               component={Link}

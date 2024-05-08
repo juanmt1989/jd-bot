@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import useDrawerState from './helper/eventhandler'
 import { BrowserRouter, Route, Routes, Link,useLocation} from 'react-router-dom';
 import TxnHistory from './views/transactionshistory'
-import ViewUsersList from './views/userslist'
+import ViewBOTUsers from './views/botuserslist'
 import SideDrawerMenu from './sidedrawer'
 import FinanceChart from './views/finance'
 import UserAccount from './views/useraccount'
@@ -50,10 +50,10 @@ export default function MainMenu() {
           <Routes >
             <Route path='/txnhistiory' element={<TxnHistory/>} />
             <Route path='/finance' element={<FinanceChart/>} />
-            <Route path='/users' element={<ViewUsersList/>} />
+            <Route path='/bots' element={<ViewBOTUsers/>} />
             <Route path='/useraccount' element={<UserAccount/>} />
           </Routes>
-          <FooterMainMenu/>
+          <FooterMainMenu/>   
       </BrowserRouter>
     </React.Fragment>
   );

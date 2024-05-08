@@ -28,12 +28,12 @@ export default function SideDrawerMenu({state,toggleDrawer}) {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-          <ListItem key="accounts" disablePadding>
+          <ListItem key="bots" disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <PeopleAltIcon/>  
               </ListItemIcon>
-              <Link to="/users"  className='plain-link'>
+              <Link to="/bots"  className='plain-link'>
                 <ListItemText primary="Accounts"/>
               </Link>
             </ListItemButton>

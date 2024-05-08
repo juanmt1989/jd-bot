@@ -12,3 +12,4 @@ export const GetUserInformation = async () => {
       return {error: `Error fetching data: '${error}'`};;
   }
 }
+

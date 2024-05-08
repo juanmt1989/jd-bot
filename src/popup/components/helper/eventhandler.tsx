@@ -5,6 +5,7 @@ export default function useDrawerState() {
     const [state, setState] = React.useState(false);
 
     const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+        event.preventDefault();
         if (
           event.type === 'keydown' &&
           ((event as React.KeyboardEvent).key === 'Tab' ||
