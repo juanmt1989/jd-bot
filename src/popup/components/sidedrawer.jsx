@@ -1,24 +1,30 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import TimelineIcon from '@mui/icons-material/Timeline';
-import { runtime } from 'webextension-polyfill'
+import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsInputCompositeIcon from '@mui/icons-material/SettingsInputComposite';
 import {Link} from 'react-router-dom';
-import useDrawerState from './helper/eventhandler'
 
-export default function SideDrawerMenu({state,toggleDrawer}) {
+
+export default function SideDrawerMenu({state,toggleDrawer,selectedIndex,handleListItemClick}) {
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
 
   const list = () => (
     <Box
@@ -29,7 +35,10 @@ export default function SideDrawerMenu({state,toggleDrawer}) {
     >
       <List>
           <ListItem key="bots" disablePadding>
-            <ListItemButton>
+            <ListItemButton
+             selected={selectedIndex === 1}
+             onClick={(event) => handleListItemClick(event, 1)}
+            >
               <ListItemIcon>
                 <PeopleAltIcon/>  
               </ListItemIcon>
@@ -41,7 +50,10 @@ export default function SideDrawerMenu({state,toggleDrawer}) {
       </List>
       <List>
           <ListItem key="txnhistiory" disablePadding>
-            <ListItemButton>
+            <ListItemButton 
+             selected={selectedIndex === 2}
+             onClick={(event) => handleListItemClick(event, 2)}
+            >
               <ListItemIcon>
                 <TimelineIcon/>  
               </ListItemIcon>
@@ -53,7 +65,10 @@ export default function SideDrawerMenu({state,toggleDrawer}) {
       </List>
       <List>
           <ListItem key="finance" disablePadding>
-            <ListItemButton>
+            <ListItemButton
+             selected={selectedIndex === 3}
+             onClick={(event) => handleListItemClick(event, 3)}
+            >
               <ListItemIcon>
                 <LeaderboardIcon/>  
               </ListItemIcon>
@@ -66,21 +81,37 @@ export default function SideDrawerMenu({state,toggleDrawer}) {
       <Divider />
 
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        <ListItemButton onClick={handleClick}>
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Settings" />
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton 
+              sx={{ pl: 4 }}
+              selected={selectedIndex === 5}
+              onClick={(event) => handleListItemClick(event, 5)}
+            >
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <SettingsInputCompositeIcon />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <Link to="/bidrules"  className='plain-link'>
+                <ListItemText primary="Bid Rules" />
+              </Link>
             </ListItemButton>
-          </ListItem>
-        ))}
+          </List>
+        </Collapse>
       </List>
       <Divider />
       <List>
           <ListItem key="useraccount" disablePadding>
-            <ListItemButton>
+            <ListItemButton
+             selected={selectedIndex === 4}
+             onClick={(event) => handleListItemClick(event, 4)}
+            >
               <ListItemIcon>
                 <AccountCircleIcon/>  
               </ListItemIcon>

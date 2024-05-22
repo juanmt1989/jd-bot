@@ -6,9 +6,10 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 import useDrawerState from './helper/eventhandler'
-import { BrowserRouter, Route, Routes, Link,useLocation} from 'react-router-dom';
+import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import TxnHistory from './views/transactionshistory'
 import ViewBOTUsers from './views/botuserslist'
+import ViewBidRules from './views/bidrules'
 import SideDrawerMenu from './sidedrawer'
 import FinanceChart from './views/finance'
 import UserAccount from './views/useraccount'
@@ -16,7 +17,7 @@ import FooterMainMenu from './footermenu'
 
 export default function MainMenu() {
   const ref = React.useRef<HTMLDivElement>(null);
-  const {toggleDrawer,state} = useDrawerState();
+  const {toggleDrawer,state,selectedIndex,handleListItemClick} = useDrawerState();
 
 
   return (
@@ -46,11 +47,16 @@ export default function MainMenu() {
         <div className='header-size'></div>
       </div>
       <BrowserRouter>
-          <SideDrawerMenu state={state} toggleDrawer={toggleDrawer}/>
+          <SideDrawerMenu 
+              state={state} 
+              toggleDrawer={toggleDrawer} 
+              selectedIndex={selectedIndex} 
+              handleListItemClick={handleListItemClick} />
           <Routes >
             <Route path='/txnhistiory' element={<TxnHistory/>} />
             <Route path='/finance' element={<FinanceChart/>} />
             <Route path='/bots' element={<ViewBOTUsers/>} />
+            <Route path='/bidrules' element={<ViewBidRules/>} />
             <Route path='/useraccount' element={<UserAccount/>} />
           </Routes>
           <FooterMainMenu/>   
