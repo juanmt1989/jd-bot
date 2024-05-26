@@ -1,7 +1,7 @@
 import { runtime } from 'webextension-polyfill'
 import { getCurrentTab } from '../../helpers/tabs'
 import * as crypt from '../../helpers/encrypt'
-import {CustomerAction}  from '../../models/customeraction'
+import {CustomerAction}  from '../../models/eventaction'
 import {GetUserInformation} from '../apicalls/solescall'
 
 
@@ -20,6 +20,7 @@ export async function Receiver() {
             let data =  await GetUserInformation()
             let encrypt = crypt.encryptData(data)
             console.log('encrypt: ',encrypt)
+            
             Sender(CustomerAction.SaveCustomer,encrypt)
         }
 
