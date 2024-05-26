@@ -26,8 +26,7 @@ declare namespace jdbotScheme {
         id : number,
         name: string,
         abbr: string,
-        lastattempt: Date,
-        nextattempt: Date, 
+        tolerance: number,
     }
 
     type block = {
@@ -66,7 +65,7 @@ declare namespace jdbotScheme {
 }  
 export type userformation = jdbotScheme.userformation
 export type operation = jdbotScheme.operation
-export type coin = jdbotScheme.coin
+//export type coin = jdbotScheme.coin
 export type ordercoin = jdbotScheme.ordercoin
 export type block = jdbotScheme.block
 export type profits = jdbotScheme.profits

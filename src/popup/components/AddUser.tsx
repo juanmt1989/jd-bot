@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import BlockIcon from '@mui/icons-material/Block';
 import Fab from '@mui/material/Fab';
 import {Sender} from '../distpacher/popupservice'
-import {CustomerAction}  from '../../models/customeraction'
+import {CustomerAction}  from '../../models/eventaction'
 
 const AddUser = () => {
   const [clicked, setClicked] = useState(false);

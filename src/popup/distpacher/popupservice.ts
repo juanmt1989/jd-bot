@@ -1,7 +1,7 @@
 import { runtime } from 'webextension-polyfill'
 import { getCurrentTab } from '../../helpers/tabs'
 import  jdbScheme,  {userformation} from '../../models/scheme'
-import {CustomerAction,CustomerMessage}  from '../../models/customeraction'
+import {CustomerAction,CustomerMessage}  from '../../models/eventaction'
 
 export async function Sender(action:CustomerAction) {
     console.log('Sender: from popup to backgroundadd ',action)
