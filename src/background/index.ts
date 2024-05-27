@@ -1,6 +1,8 @@
 import { runtime, storage } from 'webextension-polyfill'
 import { getCurrentTab } from '../helpers/tabs'
 import * as distpacher from './distpacher/backgroundservice'
+import {daemon} from './daemon'
+
 
 
 async function incrementStoredValue(tabId: string) {
@@ -29,7 +31,7 @@ export async function init() {
 runtime.onInstalled.addListener(() => {
 
   distpacher.Receiver().then(() => {
-    console.log('[background] distpacher loaded ')
+    console.log('[background] distpacher loaded ');
   });//start listen popup and content
-
+  daemon();
 })
