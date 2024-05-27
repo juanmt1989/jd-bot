@@ -47,7 +47,7 @@ function refreshPage() {
 
     do{
       console.warn("sleep started");
-      sleep(30000);
+      sleep(90000);
       console.warn("sleep ended");
 
     }while(isProcessActive())
