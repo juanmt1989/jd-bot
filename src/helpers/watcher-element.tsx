@@ -12,13 +12,13 @@ const useMutationObserver: MutationObserverHook = (targetId, callback, options) 
 
     if (!targetNode) {
       if (location.includes("arbitrage/manual")){
-        console.warn(`Element with id '${targetId}' not found.`);
+        console.info(`Element with id '${targetId}' not found.`);
         return;
       }
       
     }
     else{
-
+      
       const observer = new MutationObserver(callback);
       observer.observe(targetNode, options);
 

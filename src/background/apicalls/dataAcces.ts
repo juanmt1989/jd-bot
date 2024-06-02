@@ -34,7 +34,7 @@ export const SaveUserInfo = async (sbUser:any) => {
 
   export const GetBidRules = async () => {
     try {
-        const response = await fetch("http://localhost:5050/bidrules");
+        const response = await fetch("http://localhost:5050/bidrules?id=2");
         if (response.ok) {
             const data = await response.json();
             return data;

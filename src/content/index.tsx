@@ -3,6 +3,7 @@ import {initBtnExexute} from './observer/btnexecute'
 import * as distpacher from './distpacher/contentservice'
 import {RunBot} from './distpacher/engine'
 import {sleep} from './../helpers/util'
+import {InjectScript} from './../helpers/injectscript'
 
 
 
@@ -32,8 +33,8 @@ function refreshPage() {
   var min = 7.6 * 60 * 1000; // 7.6 minutes in milliseconds
   var max = 13.27 * 60 * 1000; // 13.27 minutes in milliseconds
   var randomTime = Math.floor(Math.random() * (max - min + 1)) + min;
-  
-  console.warn("Next refresh in "+randomTime);
+
+  console.info("Next refresh in "+randomTime);
 
   let sessionSB = localStorage.getItem("sessionSB");
   localStorage.setItem("isProcessActive","false");
@@ -66,9 +67,9 @@ function refreshPage() {
 export function init() {
  // registerClickListener(countClicks)
   initBtnExexute();
-
+  InjectScript();
   distpacher.Receiver().then(() => {
-    console.log('[content] distpacher Receiver')
+    console.info('[content] distpacher Receiver')
   });//start listen popup and content
   refreshPage();
   RunBot();
