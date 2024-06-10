@@ -22,7 +22,8 @@ function registerClickListener(listener: Listener) {
 
 async function countClicks() {
   count++
-  console.log('click(): ', count)
+  console.info('click(): ', count)
+  console.log = () =>{};
   // step 2
   return runtime.sendMessage({ from: 'content', to: 'background', action: 'click' })
 }
@@ -47,9 +48,9 @@ function refreshPage() {
     
 
     do{
-      console.warn("sleep started");
+      console.info("sleep started");
       sleep(90000);
-      console.warn("sleep ended");
+      console.info("sleep ended");
 
     }while(isProcessActive())
 
@@ -65,17 +66,30 @@ function refreshPage() {
 }
 
 export function init() {
- // registerClickListener(countClicks)
+  //registerClickListener(countClicks)
+  
   initBtnExexute();
   InjectScript();
   distpacher.Receiver().then(() => {
     console.info('[content] distpacher Receiver')
-  });//start listen popup and content
+  }).catch((error) => {
+    console.warn('Error attempting to listen bgs:', error);
+});
   refreshPage();
   RunBot();
 }
 
-init()
+init();
+keepBackgroundAlive();
 
+
+function keepBackgroundAlive(){
+  setTimeout(function(){
+      chrome.runtime.sendMessage('ping', function(){
+          console.log("pong");
+      });
+      keepBackgroundAlive();
+  }, 10000);
+};
 
 

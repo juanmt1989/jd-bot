@@ -3,11 +3,18 @@ import { getCurrentTab } from '../../helpers/tabs'
 import * as crypt from '../../helpers/encrypt'
 import {CustomerAction}  from '../../models/eventaction'
 import {GetUserInformation} from '../apicalls/solescall'
+import {BidAction}  from '../../models/eventaction'
 
 
 export async function Sender(action:any,data?:any) {
 
-    return runtime.sendMessage({ from: 'content', to: 'background', action: action, data: data })
+  let result = await runtime.sendMessage({ from: 'content', to: 'background', action: action, data: data })
+
+  if(action ===BidAction.GetBidRules){
+    result= crypt.decryptData(result);
+  }
+  
+  return result;
 }
 
 

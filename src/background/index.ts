@@ -33,5 +33,6 @@ runtime.onInstalled.addListener(() => {
   distpacher.Receiver().then(() => {
     console.log('[background] distpacher loaded ');
   });//start listen popup and content
-  daemon();
+  //daemon();
 })
+

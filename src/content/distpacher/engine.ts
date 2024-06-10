@@ -1,9 +1,10 @@
 import { runtime } from 'webextension-polyfill'
 import { getCurrentTab } from '../../helpers/tabs'
-import * as crypt from '../../helpers/encrypt'
 import {BidAction}  from '../../models/eventaction'
-import {GetLastCoinExecution} from '../apicalls/solescall'
+import soles  from '../../models/solesmodel'
+import {GetLastCoinExecution,GetWaitQueueTime} from '../apicalls/solescall'
 import {Sender} from '../distpacher/contentservice'
+import {jsontoArray} from '../../helpers/util'
 import {DateTimeToString,getTimeLeftBetweenDateAndNow,StringUTCDateToLocalDate,addHoursToDate} from '../../helpers/util'
 import Enumerable from 'linq'
 
@@ -11,25 +12,41 @@ import Enumerable from 'linq'
 
 export const RunBot = async () => {
  
-    const encryptedData = await Sender(BidAction.GetBidRules)
 
-    const bidRule =  crypt.decryptData(encryptedData);
+    const bidRule = await Sender(BidAction.GetBidRules)
 
     const history = await GetLastCoinExecution();
 
+    let bidQueue = await GetWaitQueueTime();
+
+    bidQueue = jsontoArray(bidQueue);
+
+    bidQueue =Enumerable.from<soles.solesqueue>(bidQueue)
+                        .select(x=> ({
+                            bidutc : (x.has?x.date:x.now),
+                            balance : x.balance
+                        }))
+                        .select(x=> ({
+                            ...x,
+                           nextbid : StringUTCDateToLocalDate(x.bidutc,"","YYYY/MM/dd HH:MM:ss")
+                        }))
+                        .select(x=> ({
+                            ...x,
+                            nextbid :  DateTimeToString(x.nextbid),
+                            TimeLeft: getTimeLeftBetweenDateAndNow(x.nextbid)
+
+                        })).toArray()
+
+    console.warn("bidqueue")
+    console.warn(bidQueue);
+
     const lastCoins = Enumerable.from<any>(history).select(x=> ({...x, Coin: x.Coin.split('/')[0]}))
    
-
-    ///unificar el tiempo
-    //convertirlo de utc a local
-    //determinar el tiempo restante en base a 8 horas
 
     
     //buscar la ultima moneda
     let coinName : string = lastCoins.firstOrDefault()?.Coin;;
 
-    // console.warn(lastCoins.toArray());
-    // console.warn(coinName);
 
     //next coin based on priority
     let nextPriority = 1;
@@ -72,11 +89,15 @@ export const RunBot = async () => {
                         .orderByDescending(x => x.TimeLeft.seconds )
                         .firstOrDefault();
 
+    console.warn("nextCoin")
     console.warn(nextCoin);
 
-    setTimeout(() => {
-        alert( obj.Coin +" coin is ready to next operation");
-      }, obj.TimeLeft.seconds *1000);
+    // if(obj.TimeLeft !== undefined){
+    //     setTimeout(() => {
+    //        alert( obj.Coin +" coin is ready to next operation");
+    //     }, obj.TimeLeft.seconds *1000);
+    // }
+   
 
     //determinar el tiempo restante en para poder operar
         // regla de las 8 horas

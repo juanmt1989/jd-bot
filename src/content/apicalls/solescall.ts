@@ -76,3 +76,18 @@ export const GetLastCoinExecution = async () => {
     }
   
   }
+
+  export const GetWaitQueueTime = async () => {
+    try {
+        const response = await fetch('https://bot.solesbot.ai/robot/getDateInOperation');
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            return {error:'Failed to fetch data'};
+        }
+    } catch (error) {
+        return {error: `Error fetching data: '${error}'`};;
+    }
+  
+  }

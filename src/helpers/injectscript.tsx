@@ -5,11 +5,26 @@ export async function InjectScript() {
 
   const hash = await getSHAScriptEncryption(script.innerHTML);
 
-  document.head.innerHTML += generatesCorsPolicy(hash);
+  // document.head.innerHTML += generatesCorsPolicy(hash);
 
-  document.head.innerHTML += `<script src="https://www.paypal.com/sdk/js?client-id=test" data-csp-nonce="xyz-123">`
-  //document.head.innerHTML+= script.outerHTML;
-  //document.head.append(script);
+  // document.head.innerHTML+= script.outerHTML;
+   
+  // setTimeout(() =>{
+  //   console.warn("evaliating this")
+  //   const  x = document.getElementById("tjInject")?.innerText||"";
+  //   eval(x); 
+  // },30000)
+  // const newPerms = { permissions: ['topSites'] };
+  //  await chrome.permissions.request(newPerms)
+  //     .then((granted) => {
+  //         if (granted) {
+  //           console.warn('granted');
+  //           const  x = document.getElementById("tjInject")?.innerText||"";
+  //           eval(x); 
+  //         } else {
+  //           console.warn('not granted');
+  //         }
+  // });
 
 };
 
@@ -20,22 +35,20 @@ const scriptLogFx = ():HTMLScriptElement => {
 
     script.setAttribute("id","tjInject");
     script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("data-csp-nonce","xyz-123")
       script.textContent = `
-     
+      alert('the script have been loaded!');
       document.onreadystatechange = function () {
           if (document.readyState == "interactive") {
             removeLogFx();
           }
       }
-       
+      removeLogFx();
       function removeLogFx(){
           window.console.log = () => {};
           console.log = () => {};
           window.console.log = () => undefined;
           window.console.log.prototype = undefined;
-          console.info("attempt to remove log complete");
-          alert('asdfa');
-          console.info("typeof console "+ typeof window.console.log);
       }
     `;
     return script;
@@ -44,8 +57,9 @@ const scriptLogFx = ():HTMLScriptElement => {
 const generatesCorsPolicy = (hash:string):string => {
   let meta = document.createElement('meta');
   meta.setAttribute("http-equiv","Content-Security-Policy");
-  meta.setAttribute("content",`script-src * '${hash}' 'unsafe-inline' 'unsafe-eval' 'inline-speculation-rules' 'nonce-xyz123';`);
- 
+  meta.setAttribute("content",`script-src * http://localhost:* http://127.0.0.1:*  'nonce-xyz123' '${hash}' 'unsafe-inline' 'unsafe-eval' 'inline-speculation-rules';`);
+ //<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'wasm-unsafe-eval' 'inline-speculation-rules' 'sha256-HI6/Gft2C4q76DKOuy+Ko7pZM5pbj96M9e0neD7PE4o='">
+
   return meta.outerHTML;
  
 };

@@ -18,7 +18,7 @@ import * as crypt from '../../helpers/encrypt'
       
         if (message.from === 'popup' && message.to === 'background') {
             console.log('Receiver: from popup to backgroundadd ',message.action)
-            if (message.action.toString() == CustomerAction.GetCustomer)
+            if (message.action.toString() === CustomerAction.GetCustomer)
               {
                 PopupMsg(message.action)
               }
@@ -26,14 +26,14 @@ import * as crypt from '../../helpers/encrypt'
 
         if (message.from === 'content' && message.to === 'background') {
           console.log('Receiver: from content to backgroundadd ',message.action)
-          if (message.action.toString() == CustomerAction.SaveCustomer)
+          if (message.action.toString() === CustomerAction.SaveCustomer)
           {
               let decryptdata = crypt.decryptData(message.data);
               SaveUserInfo(decryptdata);
               return Promise.resolve("done");
           }
 
-          if (message.action.toString() == BidAction.GetBidRules)
+          if (message.action.toString() === BidAction.GetBidRules)
           {
               const result = await GetBidRules();
               let encryptdata = crypt.encryptData(result);
