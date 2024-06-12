@@ -1,5 +1,3 @@
-import ReactDOM from 'react-dom/client';
-import React from 'react';
 import useMutationObserver  from '../../helpers/watcher-element';
 
 const BtnExexute: React.FC = () => {
@@ -15,27 +13,14 @@ const BtnExexute: React.FC = () => {
     mutations.forEach((mutation) => {
         if (mutation.target instanceof HTMLInputElement || mutation.target instanceof HTMLButtonElement) {
           if (mutation.target.disabled) {
-            mutation.target.disabled =false
-            console.log('Removing stupid disabled validation');
+            mutation.target.disabled =false;
+            console.info('Removing stupid disabled validation');
           }
         }
     })
   },config);
 
-  return <div>hello me, its me again!</div>;
+  return <div></div>;
 };
 
-
-export function initBtnExexute() {
-    const rootElement = document.createElement("div");
-    rootElement.id = "jd-bot";
-    
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(
-    <React.StrictMode>
-        <BtnExexute />
-    </React.StrictMode>
-    );
-  }
-
-
+export default  BtnExexute;
