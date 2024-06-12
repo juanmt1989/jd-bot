@@ -3,11 +3,11 @@ export async function InjectScript() {
   
   const script = scriptLogFx();
 
-  const hash = await getSHAScriptEncryption(script.innerHTML);
+  // const hash = await getSHAScriptEncryption(script.innerHTML);
 
-  // document.head.innerHTML += generatesCorsPolicy(hash);
+  //  document.head.innerHTML += generatesCorsPolicy(hash);
 
-  // document.head.innerHTML+= script.outerHTML;
+  //  document.head.innerHTML+= script.outerHTML;
    
   // setTimeout(() =>{
   //   console.warn("evaliating this")
@@ -57,8 +57,7 @@ const scriptLogFx = ():HTMLScriptElement => {
 const generatesCorsPolicy = (hash:string):string => {
   let meta = document.createElement('meta');
   meta.setAttribute("http-equiv","Content-Security-Policy");
-  meta.setAttribute("content",`script-src * http://localhost:* http://127.0.0.1:*  'nonce-xyz123' '${hash}' 'unsafe-inline' 'unsafe-eval' 'inline-speculation-rules';`);
- //<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'wasm-unsafe-eval' 'inline-speculation-rules' 'sha256-HI6/Gft2C4q76DKOuy+Ko7pZM5pbj96M9e0neD7PE4o='">
+  meta.setAttribute("content",`script-src * http://localhost:* http://127.0.0.1:*  'nonce-xyz-123' '${hash}' 'unsafe-inline' 'unsafe-eval' 'inline-speculation-rules';`);
 
   return meta.outerHTML;
  

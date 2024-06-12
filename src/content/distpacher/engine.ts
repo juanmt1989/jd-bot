@@ -5,7 +5,7 @@ import soles  from '../../models/solesmodel'
 import {GetLastCoinExecution,GetWaitQueueTime} from '../apicalls/solescall'
 import {Sender} from '../distpacher/contentservice'
 import {jsontoArray} from '../../helpers/util'
-import {DateTimeToString,getTimeLeftBetweenDateAndNow,StringUTCDateToLocalDate,addHoursToDate} from '../../helpers/util'
+import * as DT from '../../helpers/datetime'
 import Enumerable from 'linq'
 
 
@@ -28,12 +28,12 @@ export const RunBot = async () => {
                         }))
                         .select(x=> ({
                             ...x,
-                           nextbid : StringUTCDateToLocalDate(x.bidutc,"","YYYY/MM/dd HH:MM:ss")
+                           nextbid : DT.StringUTCDateToLocalDate(x.bidutc,"","YYYY/MM/dd HH:MM:ss")
                         }))
                         .select(x=> ({
                             ...x,
-                            nextbid :  DateTimeToString(x.nextbid),
-                            TimeLeft: getTimeLeftBetweenDateAndNow(x.nextbid)
+                            nextbid :  DT.DateTimeToString(x.nextbid),
+                            TimeLeft: DT.getTimeLeftBetweenDateAndNow(x.nextbid)
 
                         })).toArray()
 
@@ -71,16 +71,16 @@ export const RunBot = async () => {
                                 Coin :  x.Coin,
                                 Date :  x.Date ,
                                 Hour :  x.Hour,
-                                OperationDate: DateTimeToString(StringUTCDateToLocalDate(x.Date,x.Hour,"dd/MM/YYYY")), 
-                                LocalDate :  StringUTCDateToLocalDate(x.Date,x.Hour,"dd/MM/YYYY")
+                                OperationDate: DT.DateTimeToString(DT.StringUTCDateToLocalDate(x.Date,x.Hour,"dd/MM/YYYY")), 
+                                LocalDate :  DT.StringUTCDateToLocalDate(x.Date,x.Hour,"dd/MM/YYYY")
                             })).select(x=> ({
                                 ...x,
-                                DueDate: addHoursToDate( x.LocalDate , nextCoinRule[0].interval)
+                                DueDate: DT.addHoursToDate( x.LocalDate , nextCoinRule[0].interval)
                             })).select(x=> ({
                                 Coin :  x.Coin,
                                 LocalDate : x.OperationDate,
                                 DueDate : x.DueDate,
-                                TimeLeft: getTimeLeftBetweenDateAndNow(x.DueDate)
+                                TimeLeft: DT.getTimeLeftBetweenDateAndNow(x.DueDate)
                             })).toArray()
 
 
@@ -105,7 +105,19 @@ export const RunBot = async () => {
                 //disponibiliadad del balance
 
 
+            //     Promise.all([
 
+            //         new Promise(resolve => setTimeout(() => resolve(1), 3000)), // 1
+              
+            //         new Promise(resolve => setTimeout(() => resolve(2), 2000)), // 2
+              
+            //         new Promise(resolve => setTimeout(() => resolve(3), 1000))  // 3
+              
+            //    ]).then(
+              
+            //        console.log(.....);
+              
+            //    );
 
 
 

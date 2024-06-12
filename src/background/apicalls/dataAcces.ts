@@ -21,7 +21,7 @@ export const SaveUserInfo = async (sbUser:any) => {
         });
         if (response.ok) {
             const data = await response.json();
-            return data;
+            return data.userid;
         } else {
             console.log(`HTTP error! status: ${response.status}`);
         }
@@ -30,6 +30,30 @@ export const SaveUserInfo = async (sbUser:any) => {
     }
   }
 
+
+
+  export const SaveBotInfo = async (bot:any) => {
+
+    try {
+        const response = await fetch("http://localhost:5050/botusers", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(bot),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.warn("SaveBotInfo")
+            console.warn(data)
+            return data.userid;
+        } else {
+            console.log(`HTTP error! status: ${response.status}`);
+        }
+    } catch (error) {
+        console.log('A problem occurred adding or updating a record: ', error);
+    }
+  }
 
 
   export const GetBidRules = async () => {

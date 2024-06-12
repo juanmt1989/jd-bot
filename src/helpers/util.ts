@@ -1,13 +1,52 @@
 import { json } from "stream/consumers";
+import { runtime } from 'webextension-polyfill'
+
+const isProcessActive= ()=>{ return (localStorage.getItem("isProcessActive")==="true"); };
+
+function refreshPage() {
+  var min = 7.6 * 60 * 1000; // 7.6 minutes in milliseconds
+  var max = 13.27 * 60 * 1000; // 13.27 minutes in milliseconds
+  var randomTime = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  console.info("Next refresh in "+randomTime);
+
+  let sessionSB = localStorage.getItem("sessionSB");
+  localStorage.setItem("isProcessActive","false");
+  let total: number = 0;
+
+  if(sessionSB!= null) total=JSON.parse(sessionSB).ExecutionCount
+
+
+  setTimeout(function() {
+    
+
+    // do{
+    //   console.info("sleep started");
+    //   sleep(90000);
+    //   console.info("sleep ended");
+
+    // }while(isProcessActive())
+
+    let session = {
+      LastExecution:Date.now(),
+      ExecutionCount: ++total
+    }
+    
+    localStorage.setItem("sessionSB",JSON.stringify(session) );
+     document.location.reload();
+   
+  }, randomTime);
+};
 
 const keepBackgroundAlive = () =>{
     setTimeout(function(){
-        chrome.runtime.sendMessage('ping', function(){
-            console.log("pong");
-        });
+    
+        runtime.sendMessage({ from: 'content', to: 'background', action: 'ping' });
         keepBackgroundAlive();
     }, 10000);
   };
+
+export enum TimeFormat {  H, M, S, ms } 
 
 async function sleep(time:number,format?:TimeFormat) {
     let millisecond:number;
@@ -43,105 +82,4 @@ const jsontoArray = (jsonObj:any) =>
     return array;
 };
 
-const StringUTCDateToLocalDate = (sDate:string,sTime?:string, dFormat?:string) =>{
-
-    let date: Date = new Date();
-
-    if(sDate===null || sDate ===""){
-        console.error("Date field is required.");
-    } 
-    
-   // console.warn(`date: ${sDate}, formart: ${dFormat}`)
-
-    let d = {year:0,month:0,day:0,hour:0, minutes:0,second:0};   
-    let spread = dFormat?.includes("/") ? sDate.split("/") : sDate.split("-");
-
-    if(dFormat?.includes("YYYY-MM-dd") ||  dFormat?.includes("YYYY/MM/dd")){
-
-        let day = dFormat?.includes("HH:MM:ss")? spread[2].split(" ")[0]: spread[2];
-        d.year=Number(spread[0]);
-        d.month = Number(spread[1]);
-        d.day = Number(day);
-       
-    }
-
-    if(dFormat?.includes("MM-dd-YYYY") ||  dFormat?.includes("MM/dd/YYYY")){
-
-       
-        d.month = Number(spread[0]);
-        d.day = Number(spread[1]);
-        d.year=Number(spread[2]);
-    }
-
-    if(dFormat?.includes("dd-MM-YYYY") ||  dFormat?.includes("dd/MM/YYYY")){
-    
-        
-        d.day = Number(spread[0]);
-        d.month = Number(spread[1]);
-        d.year=Number(spread[2]);
-    }
-
-    //"2024/04/19 21:39:23"
-    if(!(sTime===null) && !(sTime ==="")) {
-        spread = sTime?.split(":")||[];
-        d.hour =Number(spread[0]);
-        d.minutes =Number(spread[1]);
-    }
-    else if(dFormat?.includes("HH:MM:ss")){
-        spread = sDate.split(" ")[1].split(":")
-        d.hour =Number(spread[0]);
-        d.minutes =Number(spread[1]);
-        d.second =Number(spread[2]);
-    }
-    //console.warn(`join date: ${JSON.stringify(d)}`)
-
-    let utc = Date.UTC(d.year,d.month-1,d.day,d.hour,d.minutes,d.second);  //index month  
-    return  new Date(utc);
-}
-
-const DateTimeToString = (objDate:Date) =>{
-    const dateLocal = objDate.toLocaleString("en-US", { timeZoneName :"short",hour12: false });
-    return dateLocal;
-}
-
-
-const getTimeLeftBetweenDateAndNow = (date: Date) :DueDate => {
-const now = new Date();
-let timeLeft = 0;
-let seconds = 0;
-let minutes = 0;
-let hours = 0;
-let days = 0;
-
-if (now < date) {
-   
-    seconds = Math.floor(date.getSeconds() - now.getSeconds());
-    minutes = Math.floor(date.getMinutes() - now.getMinutes());
-    hours = Math.floor(date.getHours() - now.getHours());
-    days = Math.floor(date.getDay() - now.getDay());
-    timeLeft = Math.floor(date.getTime() - now.getTime());
-}
-
-return { days, hours, minutes, seconds, timeLeft};
-};
-
-
-const addHoursToDate = (date:Date,hours:number) : Date =>{
-
-    date.setHours(date.getHours() + hours);
-    return date;
-}
-
-export type DueDate = {
-    days: number, 
-    hours : number, 
-    minutes : number, 
-    seconds : number, 
-    timeLeft : number
-}
-
-export enum TimeFormat {  H, M, S, ms } 
-
-export {keepBackgroundAlive,sleep,jsontoArray}
-
-export { StringUTCDateToLocalDate, DateTimeToString, getTimeLeftBetweenDateAndNow,addHoursToDate}  
+export {keepBackgroundAlive,sleep,jsontoArray,refreshPage}

@@ -1,75 +1,37 @@
-import { runtime } from 'webextension-polyfill'
-import {initBtnExexute} from './observer/btnexecute'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import BtnExexute from './observer/btnexecute'
 import * as distpacher from './distpacher/contentservice'
 import {RunBot} from './distpacher/engine'
-import {sleep} from './../helpers/util'
+import {refreshPage,keepBackgroundAlive} from './../helpers/util'
 import {InjectScript} from './../helpers/injectscript'
+import UserAction from './componets/useraction'
 
+const InjectBot = () =>{
+  const rootElement = document.createElement("div");
+  rootElement.style.position = "sticky";
+  rootElement.style.bottom = "10px";
+  rootElement.style.left = "95%";
+  rootElement.style.width = "100px";
+  
+  rootElement.id = "jd-bot";
 
+  document.getElementsByTagName('body')[0].appendChild(rootElement);
 
-type Listener = (event: MouseEvent) => void
-
-let count = 0
-
-function registerClickListener(listener: Listener) {
-  window.addEventListener('click', listener)
-
-  // step 2
-  return function cleanup() {
-    window.removeEventListener('click', listener)
-  }
-}
-
-async function countClicks() {
-  count++
-  console.info('click(): ', count)
-  console.log = () =>{};
-  // step 2
-  return runtime.sendMessage({ from: 'content', to: 'background', action: 'click' })
-}
-
-const isProcessActive= ()=>{ return (localStorage.getItem("isProcessActive")==="true"); };
-
-function refreshPage() {
-  var min = 7.6 * 60 * 1000; // 7.6 minutes in milliseconds
-  var max = 13.27 * 60 * 1000; // 13.27 minutes in milliseconds
-  var randomTime = Math.floor(Math.random() * (max - min + 1)) + min;
-
-  console.info("Next refresh in "+randomTime);
-
-  let sessionSB = localStorage.getItem("sessionSB");
-  localStorage.setItem("isProcessActive","false");
-  let total: number = 0;
-
-  if(sessionSB!= null) total=JSON.parse(sessionSB).ExecutionCount
-
-
-  setTimeout(function() {
-    
-
-    do{
-      console.info("sleep started");
-      sleep(90000);
-      console.info("sleep ended");
-
-    }while(isProcessActive())
-
-    let session = {
-      LastExecution:Date.now(),
-      ExecutionCount: ++total
-    }
-    
-    localStorage.setItem("sessionSB",JSON.stringify(session) );
-     document.location.reload();
-   
-  }, randomTime);
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+  <React.StrictMode>
+      <BtnExexute />
+      <UserAction/>
+  </React.StrictMode>
+  );
 }
 
 export function init() {
-  //registerClickListener(countClicks)
-  
-  initBtnExexute();
+  InjectBot();
   InjectScript();
+  keepBackgroundAlive();
+
   distpacher.Receiver().then(() => {
     console.info('[content] distpacher Receiver')
   }).catch((error) => {
@@ -77,19 +39,16 @@ export function init() {
 });
   refreshPage();
   RunBot();
+
+  
+  window.onstorage = () => {
+    // When local storage changes, dump the list to
+    if(window.localStorage.getItem("isLinked"))
+      console.warn(window.localStorage.getItem("isLinked"));
+  };
+  
 }
 
 init();
-keepBackgroundAlive();
-
-
-function keepBackgroundAlive(){
-  setTimeout(function(){
-      chrome.runtime.sendMessage('ping', function(){
-          console.log("pong");
-      });
-      keepBackgroundAlive();
-  }, 10000);
-};
 
 

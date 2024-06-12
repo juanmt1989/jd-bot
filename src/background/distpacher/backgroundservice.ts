@@ -1,8 +1,10 @@
-import { runtime } from 'webextension-polyfill'
+
+import { runtime, storage, tabs } from 'webextension-polyfill'
 import { getCurrentTab } from '../../helpers/tabs'
 import  jdbScheme,  {userformation} from '../../models/scheme'
 import {CustomerAction,BidAction}  from '../../models/eventaction'
-import {SaveUserInfo,GetBidRules} from '../apicalls/dataAcces'
+import {SaveUserInfo,GetBidRules,SaveBotInfo} from '../apicalls/dataAcces'
+import {GetGenderByMail,GetUserByGender} from '../apicalls/parsercall'
 import * as crypt from '../../helpers/encrypt'
   
   export async function Sender() {
@@ -17,7 +19,7 @@ import * as crypt from '../../helpers/encrypt'
     runtime.onMessage.addListener(async (message: any) => {
       
         if (message.from === 'popup' && message.to === 'background') {
-            console.log('Receiver: from popup to backgroundadd ',message.action)
+            console.info('Receiver: from popup to backgroundadd ',message.action)
             if (message.action.toString() === CustomerAction.GetCustomer)
               {
                 PopupMsg(message.action)
@@ -25,12 +27,26 @@ import * as crypt from '../../helpers/encrypt'
         }
 
         if (message.from === 'content' && message.to === 'background') {
-          console.log('Receiver: from content to backgroundadd ',message.action)
+          console.info('Receiver: from content to backgroundadd ',message.action)
+
           if (message.action.toString() === CustomerAction.SaveCustomer)
           {
               let decryptdata = crypt.decryptData(message.data);
-              SaveUserInfo(decryptdata);
-              return Promise.resolve("done");
+              let uid =  await SaveUserInfo(decryptdata);
+              const gender = await GetGenderByMail(decryptdata.email);
+              const randomUser = await GetUserByGender(gender);
+             
+              let bot ={
+                idUser: uid,
+                gender: gender,
+                name: decryptdata.name.split(" ")[0],
+                salutation: randomUser[0].salutation,
+                nickname: randomUser[0].nickname,
+              }
+
+              const botud = await SaveBotInfo(bot);
+              
+              return Promise.resolve({botud :botud,isLinked:true});
           }
 
           if (message.action.toString() === BidAction.GetBidRules)

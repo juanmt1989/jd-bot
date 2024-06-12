@@ -21,5 +21,6 @@
   "action": {
     "default_popup": "index.html"
   },
-  "permissions": ["storage", "tabs", "activeTab","scripting","idle","topSites"]
+  "permissions": ["storage", "tabs", "activeTab","scripting","idle","topSites"],
+  "host_permissions": ["<all_urls>"]
 }
