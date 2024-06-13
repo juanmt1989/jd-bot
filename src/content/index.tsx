@@ -7,7 +7,11 @@ import {refreshPage,keepBackgroundAlive} from './../helpers/util'
 import {InjectScript} from './../helpers/injectscript'
 import UserAction from './componets/useraction'
 
-const InjectBot = () =>{
+const InjectBot = async () =>{
+  
+  if(!document.location.href.includes("manual"))
+   return;
+
   const rootElement = document.createElement("div");
   rootElement.style.position = "sticky";
   rootElement.style.bottom = "10px";
@@ -44,7 +48,9 @@ export function init() {
   window.onstorage = () => {
     // When local storage changes, dump the list to
     if(window.localStorage.getItem("isLinked"))
-      console.warn(window.localStorage.getItem("isLinked"));
+      console.warn("user is linked");
+    else
+      console.warn("user is not linked");
   };
   
 }
