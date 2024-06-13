@@ -4,7 +4,7 @@ import { getCurrentTab } from '../../helpers/tabs'
 import  jdbScheme,  {userformation} from '../../models/scheme'
 import {CustomerAction,BidAction}  from '../../models/eventaction'
 import {SaveUserInfo,GetBidRules,SaveBotInfo} from '../apicalls/dataAcces'
-import {GetGenderByMail,GetUserByGender} from '../apicalls/parsercall'
+import {GetGenderByMail,GetUserByGender,GetGenderByName} from '../apicalls/parsercall'
 import * as crypt from '../../helpers/encrypt'
   
   export async function Sender() {
@@ -33,12 +33,14 @@ import * as crypt from '../../helpers/encrypt'
           {
               let decryptdata = crypt.decryptData(message.data);
               let uid =  await SaveUserInfo(decryptdata);
-              const gender = await GetGenderByMail(decryptdata.email);
-              const randomUser = await GetUserByGender(gender);
+              let gender1 = await GetGenderByMail(decryptdata.email);
+              let gender2 = await GetGenderByName(decryptdata.name);
+
+              const randomUser = await GetUserByGender(gender1||gender2||"");
              
               let bot ={
                 idUser: uid,
-                gender: gender,
+                gender:  randomUser[0].gender,
                 name: decryptdata.name.split(" ")[0],
                 salutation: randomUser[0].salutation,
                 nickname: randomUser[0].nickname,
