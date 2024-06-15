@@ -69,3 +69,25 @@ export const SaveUserInfo = async (sbUser:any) => {
         console.log('A problem occurred adding or updating a record: ', error);
     }
   }
+
+  
+  export const UpdateCoinList = async (coinList:any) => {
+
+    try {
+        const response = await fetch("http://localhost:5050/coins/bulkinsert/", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(coinList),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            console.log(`HTTP error! status: ${response.status}`);
+        }
+    } catch (error) {
+        console.log('A problem occurred adding or updating a record: ', error);
+    }
+  }

@@ -28,6 +28,7 @@ export async function init() {
         sendResponse({farewell: "pong"});
         if(!isRemoved){
           runScript(tabId);
+          storage.local.set({ tabId : tabId })
           isRemoved =true;
         }
     }

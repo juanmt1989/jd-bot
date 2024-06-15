@@ -61,7 +61,7 @@ export const GetGenderByMail = async (email:string) => {
   
   }
 
-export const GetGenderByName = async (name:string) => {
+export const GetGenderByFullName = async (name:string) => {
     try {
         const response = await fetch(`https://api.parser.name/?api_key=${parserkey}&endpoint=parse&name=${encodeURI(name)}`);
         if (response.ok) {

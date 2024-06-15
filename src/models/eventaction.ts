@@ -14,9 +14,5 @@ export enum CustomerAction {
 
 export enum BidAction {
     GetBidRules = "GetBidRules",
-} 
-
-export enum Conexion {
-    Start = "StarConexion",
-    End = "EndConexion",
+    UpdateCoinList = "UpdateCoinList"
 } 

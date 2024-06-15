@@ -7,7 +7,7 @@ import {BidAction}  from '../../models/eventaction'
 
 
 export async function Sender(action:any,data?:any) {
-
+  console.warn("contact background");
   let result = await runtime.sendMessage({ from: 'content', to: 'background', action: action, data: data })
 
   if(action ===BidAction.GetBidRules){
