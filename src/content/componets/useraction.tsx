@@ -10,32 +10,25 @@ import LinkOffIcon from '@mui/icons-material/LinkOff';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import SyncProblemIcon from '@mui/icons-material/SyncProblem';
 import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import { SxProps } from '@mui/system';
 
-import {GetUserInformation} from '../apicalls/solescall'
+import {GetUserInformation,GetCoinList} from '../apicalls/solescall'
 import { runtime, storage } from 'webextension-polyfill'
 import * as crypt from '../../helpers/encrypt'
-import {CustomerAction}  from '../../models/eventaction'
+import {BidAction, CustomerAction}  from '../../models/eventaction'
 import {Sender} from '../distpacher/contentservice'
 
-
-let icons = [
-    { icon: <CloudSyncIcon />, name: 'Refresh Account',id:"ra"},
-    { icon: <LinkOffIcon />, name: 'Un-link Account',id:"ua" },
-    { icon: <AddLinkIcon />, name: 'Link Account' ,id:"la"},
-  ];
-let actions = icons;
-let handleEvent:any;
 
 const defStyle = {
   color: 'primary' as 'primary',
 };
 const linkinStyle = {
   color: 'common.white',
-  bgcolor: grey[500],
+  bgcolor: 'secondary',
   '&:hover': {
-    bgcolor: grey[600],
+    bgcolor: 'secondary',
   },
 };
 const linkedStyle = {
@@ -54,7 +47,7 @@ const fabs = [
     label: 'Link Account',
   },
   {
-    color: grey[500] as 'secondary',
+    color: 'secondary' as 'secondary',
     sx: linkinStyle as SxProps,
     icon: <HourglassBottomIcon />,
     label: 'Linking Account..',
@@ -77,6 +70,16 @@ export default function UserAction() {
     const [index, setStatusSyle] = React.useState(0);
     const timer = React.useRef<ReturnType<typeof setTimeout>>();
   
+    let icons = [
+      { icon: <SyncProblemIcon />, name: 'Linking Error',id:"le" , event: handleClose,},
+      { icon: <CurrencyExchangeIcon />, name: 'Refresh Coin List',id:"rcl" , event: RefreshCoins,},
+      { icon: <CloudSyncIcon />, name: 'Refresh Account',id:"ra", event: handleClose,},
+      { icon: <LinkOffIcon />, name: 'Un-link Account',id:"ua" , event: handleClose,},
+      { icon: <AddLinkIcon />, name: 'Link Account' ,id:"la", event: linkUser,},
+    ];
+  let actions = icons;
+  let handleEvent:any;
+
     React.useEffect(() => {
       return () => {
         clearTimeout(timer.current);
@@ -103,7 +106,7 @@ export default function UserAction() {
         setLinkedAcc(ret.isLinked);
         setOpen(false);
 
-        if (isLinked) {
+        if (ret.isLinked) {
           timer.current = setTimeout(() => {
             setStatusSyle(2);
             setLoading(false);
@@ -111,21 +114,33 @@ export default function UserAction() {
         }
     }
 
+    async function RefreshCoins(){
+      setStatusSyle(1);
+      setLoading(true);
+      let data =  await GetCoinList()
+      let encrypt = crypt.encryptData(data)
+      
+      const ret = await  Sender(BidAction.UpdateCoinList,encrypt)
+
+      setLinkedAcc(ret.isUpdated);
+      setOpen(ret.isUpdated);
+
+      if (ret.isUpdated) {
+        timer.current = setTimeout(() => {
+          setStatusSyle(2);
+          setLoading(false);
+        }, 2000);
+      }
+  }
+
 
     if (isLinked){
         actions= icons.filter(x=>x.id !=="la");
-        handleEvent =handleClose;
     }
     else{
         actions= icons.filter(x=>x.id ==="la");
-        handleEvent =linkUser;
     }
 
-  //the link button should get the user info from soles and send it to the background to store it.
-  //then a progress should be shown to the user, 
-    //where the background process is storing the data
-    //get a nickname 
-    //and link the nickname with the real user
   
   return (
     <Box sx={{ height: 320, transform: 'translateZ(0px)', flexGrow: 1}}>
@@ -144,7 +159,7 @@ export default function UserAction() {
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
-            onClick={handleEvent}
+            onClick={action.event}
             
           />
         ))}

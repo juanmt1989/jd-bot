@@ -12,6 +12,7 @@ import Enumerable from 'linq'
 
 export const RunBot = async () => {
  
+    return;
 
     const bidRule = await Sender(BidAction.GetBidRules)
 
